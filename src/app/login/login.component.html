@@ -1,1 +1,31 @@
-<h1>Login!</h1>
+<mat-card>
+  <mat-card-content>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <h2>{{ isLogin ? 'Login' : 'Cadastrar' }}</h2>
+
+      <mat-form-field>
+        <input matInput type="text" placeholder="Usuário" formControlName="usuario">
+        <mat-error *ngIf="usuario.hasError('required')">
+          Este campo é obrigatório
+        </mat-error>
+        <mat-error *ngIf="usuario.hasError('minlength')">
+          Insira pelo menos 5 caracteres
+        </mat-error>
+        <mat-error *ngIf="usuario.hasError('maxlength')">
+          Insira no máximo 20 caracteres
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput type="password" placeholder="Senha" formControlName="senha" required>
+        <mat-error>
+          Informe uma senha válida
+        </mat-error>
+      </mat-form-field>
+      <button mat-raised-button color="primary">{{ isLogin ? 'Login' : 'Cadastrar' }}</button>
+      <button type="button" mat-button color="primary" (click)="toggleLogin()">
+        {{ isLogin ? 'Criar Conta' : 'Já possuo uma conta' }}
+      </button>
+    </form>
+  </mat-card-content>
+</mat-card>
