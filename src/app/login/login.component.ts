@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
 
   criarForm(): void {
     this.loginForm = this.formBuilder.group({
-      usuario: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]],
+      nome: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]],
       senha: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
@@ -32,8 +32,8 @@ export class LoginComponent implements OnInit {
     this.isLogin = !this.isLogin;
   }
 
-  get usuario() {
-    return this.loginForm.get('usuario');
+  get nome() {
+    return this.loginForm.get('nome');
   }
 
   get senha() {
