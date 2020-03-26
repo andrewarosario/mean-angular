@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { AuthService } from '../core/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   templateUrl: './login.component.html',
@@ -11,7 +13,9 @@ export class LoginComponent implements OnInit {
   public isLogin = true;
 
   constructor(
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -26,6 +30,11 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(): void {
+    this.authService.autenticar(this.loginForm.value)
+      .subscribe(
+          res => this.router.navigate(['/chat']),
+          err => console.log(err)
+      );
   }
 
   toggleLogin(): void {
