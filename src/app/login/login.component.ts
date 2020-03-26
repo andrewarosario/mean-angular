@@ -30,11 +30,10 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.authService.autenticar(this.loginForm.value)
-      .subscribe(
-          res => this.router.navigate(['/chat']),
-          err => console.log(err)
-      );
+
+    this.isLogin
+      ? this.logar()
+      : this.cadastrar();
   }
 
   toggleLogin(): void {
@@ -47,6 +46,22 @@ export class LoginComponent implements OnInit {
 
   get senha() {
     return this.loginForm.get('senha');
+  }
+
+  private logar() {
+    this.authService.autenticar(this.loginForm.value)
+    .subscribe(
+        res => this.router.navigate(['/chat']),
+        err => console.log(err)
+    );
+  }
+
+  private cadastrar() {
+    this.authService.cadastrar(this.loginForm.value)
+    .subscribe(
+      res => this.toggleLogin(),
+      err => console.log(err)
+    );
   }
 
 }
