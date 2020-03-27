@@ -51,7 +51,7 @@ export class LoginComponent implements OnInit {
   private logar() {
     this.authService.autenticar(this.loginForm.value)
     .subscribe(
-        res => this.router.navigate(['/chat']),
+        res => this.router.navigate(['/dashboard']),
         err => console.log(err)
     );
   }
