@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-const LOCAL_STORAGE_KEY = 'authToken';
+const LOCAL_STORAGE_KEY = 'access-token';
 
 @Injectable({ providedIn: 'root'})
 export class TokenService {
