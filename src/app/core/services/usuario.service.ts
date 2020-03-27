@@ -3,9 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { TokenService } from './token.service';
 import { Usuario } from '../models/usuario';
 import jtw_decode from 'jwt-decode';
-import { environment } from 'src/environments/environment';
-
-const API = environment.api;
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +13,8 @@ export class UsuarioService {
   private usuarioSubject = new BehaviorSubject<Usuario>(null);
 
   constructor(
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    private router: Router
   ) {
 
       if (this.tokenService.possuiToken()) {
@@ -41,6 +40,7 @@ export class UsuarioService {
   logout() {
       this.tokenService.removerToken();
       this.usuarioSubject.next(null);
+      this.router.navigate(['/login']);
   }
 
   isLogged() {
