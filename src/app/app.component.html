@@ -3,7 +3,10 @@
   <h1>MEAN Chat</h1>
 
   <ng-container *ngIf="(usuario$ | async) as usuario">
-    <span>@{{ usuario.nome }}</span>
+    <div class="usuario-container">
+      <img [src]="usuario.avatar"/>
+      <span>@{{ usuario.nome }}</span>
+    </div>
 
     <button (click)="logout()" mat-raised-button>
       <mat-icon>logout</mat-icon>

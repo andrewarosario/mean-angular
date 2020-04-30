@@ -2,49 +2,57 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { TokenService } from './token.service';
 import { Usuario } from '../models/usuario';
-import jtw_decode from 'jwt-decode';
+import jwt_decode from 'jwt-decode';
 import { Router } from '@angular/router';
+import { SocketService } from './socket.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsuarioService {
 
-  private usuarioSubject = new BehaviorSubject<Usuario>(null);
+  private usuarioSubject$ = new BehaviorSubject<Usuario>(null);
+  public usuario$ = this.usuarioSubject$.asObservable();
 
   constructor(
     private tokenService: TokenService,
-    private router: Router
+    private router: Router,
+    private socketService: SocketService,
   ) {
 
-      if (this.tokenService.possuiToken()) {
-        this.decodeAndNotify();
-      }
+    if (this.tokenService.possuiToken()) {
+      this.atualizaUsuario();
+    }
   }
 
   setToken(token: string) {
-      this.tokenService.setToken(token);
-      this.decodeAndNotify();
+    this.tokenService.setToken(token);
+    this.atualizaUsuario();
   }
 
-  getUsuario() {
-      return this.usuarioSubject.asObservable();
+  get usuario() {
+    return this.usuarioSubject$.getValue();
   }
 
-  private decodeAndNotify() {
-      const token = this.tokenService.getToken();
-      const usuario = jtw_decode(token) as Usuario;
-      this.usuarioSubject.next(usuario);
+  private atualizaUsuario() {
+    const token = this.tokenService.getToken();
+
+    const usuario = jwt_decode(token) as Usuario;
+    if (usuario) {
+      this.usuarioSubject$.next(usuario);
+      this.socketService.entrarChat(usuario._id);
+    }
   }
 
   logout() {
-      this.tokenService.removerToken();
-      this.usuarioSubject.next(null);
-      this.router.navigate(['/login']);
+    this.socketService.sairChat(this.usuario._id);
+    this.tokenService.removerToken();
+    this.usuarioSubject$.next(null);
+    this.router.navigate(['/login']);
   }
 
-  isLogged() {
-      return this.tokenService.possuiToken();
+  isLogado() {
+    return this.tokenService.possuiToken();
   }
 
 }

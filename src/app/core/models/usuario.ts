@@ -1,5 +1,11 @@
 export interface Usuario {
-  id?: string;
+  _id?: any;
   nome: string;
   senha?: string;
+  avatar?: string;
+}
+
+export interface UsuarioMensagem extends Usuario {
+  ultimaMensagem: string;
+  dataUltimaMensagem: Date;
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../core/services/auth.service';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   templateUrl: './login.component.html',
@@ -16,6 +17,7 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private router: Router,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -51,15 +53,21 @@ export class LoginComponent implements OnInit {
   private logar() {
     this.authService.autenticar(this.loginForm.value)
     .subscribe(
-        res => this.router.navigate(['/dashboard']),
-        err => console.log(err)
+        res => this.router.navigate(['/chat']),
+        err => {
+          console.log(err);
+          this.snackBar.open(err.error.message, 'Ok', { duration: 3000 });
+        }
     );
   }
 
   private cadastrar() {
     this.authService.cadastrar(this.loginForm.value)
     .subscribe(
-      res => this.toggleLogin(),
+      res => {
+        this.snackBar.open('Cadastro realizado com sucesso! Efetue o login.', 'Ok', { duration: 3000 });
+        this.toggleLogin();
+      },
       err => console.log(err)
     );
   }

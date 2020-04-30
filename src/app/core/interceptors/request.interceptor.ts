@@ -19,7 +19,7 @@ export class RequestInterceptor implements HttpInterceptor {
       const token = this.tokenService.getToken();
       request = request.clone({
         setHeaders: {
-          'access-token': token
+          'x-access-token': token
         }
       });
 
